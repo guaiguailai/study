@@ -1,0 +1,35 @@
+<?php 
+//	接收表单$_POST变量
+var_dump($_POST);
+//用户名不能为空
+header('content-type:text/html;charset=utf-8');
+if($_POST['username']=='')
+{
+	exit('用户名不能为空');
+}
+if($_POST['password']=='')
+{
+	 exit('密码不能为空');
+}
+
+ if($_POST['password']!= $_POST['cpassword'])
+ {
+ 	 exit('密码不一致');
+ }
+ mysql_connect('localhost','root',''); 
+mysql_select_db('student');
+mysql_query('set names utf8');
+//$sql="select * from students where name='$_POST[username]'";
+$sql="select * from member where username='$_POST[username]'";
+$rs=mysql_query($sql);
+if(mysql_fetch_assoc($rs))
+ {
+	exit('用户名已经被注册，请换一个');
+
+
+}
+$password=md5($_POST['password']);
+mysql_query("INSERT INTO member(username,password) VALUES ('$_POST[username]','$password')");
+
+exit('注册成功');
+
